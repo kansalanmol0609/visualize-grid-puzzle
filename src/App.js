@@ -12,6 +12,7 @@ import { PuzzleForm } from "./components/PuzzleForm";
 // import { myTreeData as initialData} from "./data/treeTmpData";
 import { solvePuzzle } from "./data/solvePuzzle";
 import { solvable } from "./data/solvable";
+import { validInput } from "./data/validity";
 
 function App() {
   const [initialState, setInitialState] = React.useState("");
@@ -19,6 +20,7 @@ function App() {
   const [myTreeData, setMyTreeData] = React.useState([{}]);
   const [isSolvable, setIsSolvable] = React.useState(true);
   const [initState, setInitState] = React.useState(true);
+  const [valid, setValid] = React.useState(true);
 
   const submitHandler = () => {
     const initialStateMatrix = [];
@@ -34,17 +36,23 @@ function App() {
       .forEach((val) => finalStateMatrix.push(val.split(" ")));
     console.log(finalStateMatrix);
 
-    let ff = solvable(initialStateMatrix, finalStateMatrix);
-    console.log("is Solvable", ff);
-    if (ff === true) {
+    let v = validInput(initialStateMatrix, finalStateMatrix);
+    console.log("Valid Input", v);
+    let s = true;
+    if (v) {
+      s = solvable(initialStateMatrix, finalStateMatrix);
+    }
+    if (s === true && v === true) {
       console.log("came here");
       setMyTreeData(solvePuzzle(initialStateMatrix, finalStateMatrix));
     }
-    setIsSolvable(ff);
+
+    setValid(v);
+    setIsSolvable(s);
     setInitState(false);
   };
 
-  return isSolvable ? (
+  return isSolvable && valid ? (
     <Box display="flex" flexDirection="column" height="100vh">
       <Menu />
       <PuzzleForm
@@ -69,9 +77,13 @@ function App() {
         setFinalState={setFinalState}
         submitHandler={submitHandler}
       />
-      <Alert severity="error">
-        The following combination of states is not solvable
-      </Alert>
+      {valid ? (
+        <Alert severity="error">
+          The following combination of states is not solvable
+        </Alert>
+      ) : (
+        <Alert severity="warning">Entered Input is not valid</Alert>
+      )}
     </Box>
   );
 }
