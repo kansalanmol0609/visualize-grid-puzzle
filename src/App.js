@@ -2,6 +2,9 @@ import React from "react";
 
 import Box from "@material-ui/core/Box";
 
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
+
 import { DrawTree } from "./components/DrawTree";
 import { Menu } from "./components/Menu";
 import { PuzzleForm } from "./components/PuzzleForm";
@@ -15,6 +18,7 @@ function App() {
   const [finalState, setFinalState] = React.useState("");
   const [myTreeData, setMyTreeData] = React.useState([{}]);
   const [isSolvable, setIsSolvable] = React.useState(true);
+  const [initState, setInitState] = React.useState(true);
 
   const submitHandler = () => {
     const initialStateMatrix = [];
@@ -35,9 +39,9 @@ function App() {
     if (ff === true) {
       console.log("came here");
       setMyTreeData(solvePuzzle(initialStateMatrix, finalStateMatrix));
-    } else {
-      setIsSolvable(ff);
     }
+    setIsSolvable(ff);
+    setInitState(false);
   };
 
   return isSolvable ? (
@@ -50,10 +54,25 @@ function App() {
         setFinalState={setFinalState}
         submitHandler={submitHandler}
       />
+      {initState == false && (
+        <Alert severity="success">The solution is as follows</Alert>
+      )}
       {{ myTreeData } && <DrawTree myTreeData={myTreeData} />}
     </Box>
   ) : (
-    <h1>This Config cannot be solved</h1>
+    <Box display="flex" flexDirection="column" height="100vh">
+      <Menu />
+      <PuzzleForm
+        initialState={initialState}
+        setInitialState={setInitialState}
+        finalState={finalState}
+        setFinalState={setFinalState}
+        submitHandler={submitHandler}
+      />
+      <Alert severity="error">
+        The following combination of states is not solvable
+      </Alert>
+    </Box>
   );
 }
 
