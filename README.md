@@ -9,7 +9,7 @@
   <li> In the project directory, run <code> npm install </code></li>
   <li> Now run <code>yarn start </code> </li>
   <li> Runs the app in the development mode</li>
-<li> Open [http://localhost:3000](http://localhost:3000) to view it in the browser</li>
+  <li> Open <a href="http://localhost:3000">http://localhost:3000</a> to view it in the browser</li>
 </ul>
 
 <p>Made By: <a href="https://github.com/kansalanmol0609">kansalanmol0609</a>, <a href="https://github.com/i-arpitkapoor">i-arpitkapoor</a></p>
